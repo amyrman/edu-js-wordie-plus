@@ -40,11 +40,11 @@ function App() {
           )}
         </header>
         <main className="App-main">
-        <Routes>
-          <Route path="/" element={<Game />} />
-          <Route path="/highscore" element={<Highscore />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Game />} />
+            <Route path="/highscore" element={<Highscore data={data} />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
         </main>
       </div>
     </Router>

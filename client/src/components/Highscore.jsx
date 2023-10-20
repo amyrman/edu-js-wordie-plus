@@ -1,12 +1,11 @@
-function Highscore() {
-  // Define component logic here
+function Highscore(props) {
+  const { data } = props;
   return (
     <div>
-      {/* Render component UI here */}
       <h1>Highscores</h1>
       <p>These are the Top 10 best guessers!</p>
       <div>
-        {/* Placeholder for Wordle board */}
+        <p>{data}</p>
       </div>
     </div>
   );
