@@ -24,7 +24,7 @@ function App() {
           {data === null ? (
             <p>Loading...</p>
           ) : (
-            <nav>
+            <nav className="Navbar">
               <ul>
                 <li>
                   <Link to="/">Game</Link>
@@ -39,11 +39,13 @@ function App() {
             </nav>
           )}
         </header>
+        <main className="App-main">
         <Routes>
           <Route path="/" element={<Game />} />
           <Route path="/highscore" element={<Highscore />} />
           <Route path="/about" element={<About />} />
         </Routes>
+        </main>
       </div>
     </Router>
   );
