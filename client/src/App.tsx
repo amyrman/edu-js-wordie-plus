@@ -1,21 +1,26 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
+    const fetchData = async () => {
+      const response = await fetch('/api');
+      const json = await response.json();
+      setData(json.message);
+    };
+    fetchData();
   }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
+        {data === null ? (
+          <p>Loading...</p>
+        ) : (
+          <p>{data}</p>
+        )}
       </header>
     </div>
   );
