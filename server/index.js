@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { getCorrectWord } from "./utils/feedback.js";
+import feedback from "./utils/feedback.js";
 const port = process.env.port || 3001;
 const app = express();
 
