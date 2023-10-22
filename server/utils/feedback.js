@@ -49,3 +49,13 @@ export default function feedback(guessWord, correctWord) {
   }
   return checkedLetters;
 }
+
+import fs from 'fs';
+
+export function getCorrectWord(numLetters, repeatableLetters) {
+  const words = fs.readFileSync('data/words_alpha.txt', 'utf8').split('\n');
+  const filteredWords = words.filter(word => {
+    return word.length === numLetters && (!repeatableLetters && new Set(word).size === word.length);
+  });
+  return filteredWords[Math.floor(Math.random() * filteredWords.length)];
+}
