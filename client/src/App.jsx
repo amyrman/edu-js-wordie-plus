@@ -27,13 +27,13 @@ function App() {
             <nav className="Navbar">
               <ul>
                 <li>
+                  <Link to="/about">About</Link>
+                </li>
+                <li>
                   <Link to="/">Game</Link>
                 </li>
                 <li>
                   <Link to="/highscore">Highscore</Link>
-                </li>
-                <li>
-                  <Link to="/about">About</Link>
                 </li>
               </ul>
             </nav>
