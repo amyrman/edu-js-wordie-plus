@@ -1,44 +1,44 @@
 .game-board {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 400px;
-  margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .game-board-row-0 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-1 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-2 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-3 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-4 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-5 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-row-6 {
-  display: flex;
+    display: flex;
 }
 
 .game-board-cell {
-  border-radius: 8px;
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid rgb(84, 84, 84);
-  margin: 5px;
+    border-radius: 8px;
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid rgb(84, 84, 84);
+    margin: 5px;
 }
