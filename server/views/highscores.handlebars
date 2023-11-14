@@ -1,0 +1,25 @@
+<h1>Highscores</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Name</th>
+      <th>Time (seconds)</th>
+      <th>Guesses</th>
+      <th>Word length</th>
+      <th>Unique letters</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each highscores}}
+      <tr>
+        <td>{{increment @index}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.timeTaken}}</td>
+        <td>{{this.guesses}}</td>
+        <td>{{this.desiredWordLength}}</td>
+        <td>{{#if this.allowRepLetters}}No{{else}}Yes{{/if}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

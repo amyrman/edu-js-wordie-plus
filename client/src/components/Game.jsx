@@ -6,8 +6,8 @@ import "../styles/Game.css";
 const Game = () => {
     const [setupComplete, setSetupComplete] = useState(false);
     const [desiredWordLength, setDesiredWordLength] = useState(null);
-    const [allowRepeatedLetters, setAllowRepeatedLetters] = useState(false);
-    const [maxGuess, setNumRows] = useState(null);
+    const [allowRepLetters, setAllowRepLetters] = useState(false);
+    const [startTime, setStartTime] = useState(null);
 
     function handleStartGame() {
         setSetupComplete(true);
@@ -17,12 +17,8 @@ const Game = () => {
         setDesiredWordLength(length);
     }
 
-    function handleAllowRepeatedLettersChange(allow) {
-        setAllowRepeatedLetters(allow);
-    }
-
-    function handleNumRowsChange(rows) {
-        setNumRows(rows);
+    function handleAllowRepLettersChange(allow) {
+        setAllowRepLetters(allow);
     }
 
     return (
@@ -31,15 +27,16 @@ const Game = () => {
             <GameSetup
                 onStart={handleStartGame}
                 onDesiredWordLengthChange={handleWordLengthChange}
-                onAllowRepeatedLettersChange={handleAllowRepeatedLettersChange}
-                onMaxGuessChange={handleNumRowsChange}
+                onAllowRepeatedLettersChange={handleAllowRepLettersChange}
+                setStartTime={setStartTime}
             />
 
             {setupComplete && (
                 <GameBoard
                     desiredWordLength={desiredWordLength}
-                    allowRepeatedLetters={allowRepeatedLetters}
-                    maxGuess={maxGuess}
+                    allowRepLetters={allowRepLetters}
+                    startTime={startTime}
+                    setStartTime={setStartTime}
                 />
             )}
         </>

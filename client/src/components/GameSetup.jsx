@@ -7,11 +7,13 @@ import { startGame } from "../services/api.js";
 // styles
 import "../styles/GameSetup.css";
 
+// TODO: Add conditionally rendered "advanced" options
+
 export default function GameSetup({
     onStart,
     onDesiredWordLengthChange,
     onAllowRepeatedLettersChange,
-    onMaxGuessChange,
+    setStartTime
 }) {
     const [error, setError] = useState(null);
 
@@ -39,21 +41,18 @@ export default function GameSetup({
             Unlimited
         </option>
     );
-
+    
     const handleStartClick = (event) => {
         event.preventDefault();
+
+        setStartTime(Date.now());
 
         const form = event.target.elements;
         const desiredWordLength = parseInt(form.desiredWordLength.value);
         const allowRepLetters = form.allowRepLetters.checked;
-        const maxGuess =
-            form.maxGuess.value === "unlimited"
-                ? "unlimited"
-                : parseInt(form.maxGuess.value);
 
         onDesiredWordLengthChange(desiredWordLength);
         onAllowRepeatedLettersChange(allowRepLetters);
-        onMaxGuessChange(maxGuess);
 
         const data = { desiredWordLength, allowRepLetters };
 
@@ -72,16 +71,13 @@ export default function GameSetup({
 
     const handleRandomizeClick = () => {
         // Generate random values for each form field
-        const randomNumRows = Math.floor(Math.random() * 10) + 1;
         const randomWordLength = Math.floor(Math.random() * (32 - 2 + 1)) + 2;
         const randomAllowRepLetters = Math.random() < 0.5;
 
         // Get the select elements and checkbox
-        const maxGuessSelect = document.getElementById("maxGuess");
         const wordLengthSelect = document.getElementById("desiredWordLength");
 
         // Set the select elements and checkbox to the random values
-        maxGuessSelect.value = randomNumRows;
         wordLengthSelect.value = randomWordLength;
         allowRepLettersRef.current.checked = randomAllowRepLetters;
     };

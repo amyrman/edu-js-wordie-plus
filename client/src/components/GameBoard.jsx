@@ -9,14 +9,48 @@ import { sendGuess } from "../services/api";
 import "../styles/GameBoard.css";
 
 export default function GameBoard({
-    desiredWordLength
+    desiredWordLength,
+    allowRepLetters,
+    startTime,
+    setStartTime,
 }) {
     const [keysArray, setKeysArray] = useState([]);
     const [feedbackArray, setFeedbackArray] = useState([]);
+    const [guesses, setGuesses] = useState(1);
 
     const gameOver = () => {
-        // Logic for game over goes here...
-        console.log("Game over, you won!");
+        let endTime = Date.now();
+        let timeTaken = endTime - startTime;
+        setStartTime(endTime);
+        console.log("End time:", endTime);
+
+        // Get the player's name
+        let playerName = prompt("You won!! Please enter highscore name:"); // Or get the value from an input / form field
+
+        const data = {
+            name: playerName,
+            timeTaken: timeTaken,
+            guesses: guesses,
+            desiredWordLength: desiredWordLength,
+            allowRepLetters: allowRepLetters,
+        };
+
+        console.log("data for highscores db: ", data);
+
+        fetch("/api/highscores", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     };
 
     const validateResponseData = (responseData) => {
@@ -45,6 +79,8 @@ export default function GameBoard({
                 gameOver();
             }
 
+            setGuesses((prevGuesses) => prevGuesses + 1);
+
             setFeedbackArray(
                 checkedLetters.map((item) => {
                     return {
@@ -62,6 +98,7 @@ export default function GameBoard({
         try {
             const newKey = event.key;
             const guessWord = keysArray.join("");
+
             switch (newKey) {
                 case "Backspace":
                     setKeysArray((prevKeys) => prevKeys.slice(0, -1));
@@ -72,6 +109,7 @@ export default function GameBoard({
                             "Please make sure guessed word is long enough"
                         );
                     }
+                    // setGuesses((prevGuesses) => [...prevGuesses, guessWord]);
                     handleGuess(guessWord);
                     setKeysArray([]);
                     break;

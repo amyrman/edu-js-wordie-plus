@@ -7,8 +7,9 @@ export async function startGame(data) {
         body: JSON.stringify(data),
     });
     if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        const text = await response.text();
+        const errorData = text ? JSON.parse(text) : {};
+        throw new Error(errorData.error || 'Server error');
     }
 }
 
