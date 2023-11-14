@@ -4,6 +4,13 @@ import Game from "./components/Game";
 import Highscore from "./components/Highscore";
 import About from "./components/About";
 import "./App.css";
+import WebFont from 'webfontloader';
+
+WebFont.load({
+  google: {
+    families: ['Press Start 2P', 'cursive']
+  }
+});
 
 const App = () => {
     const [data, setData] = useState(null);

@@ -1,110 +1,144 @@
-import React, { useState, useEffect } from "react";
+import Cell from "./Cell";
+import { useState } from "react";
+import { sendGuess } from "../services/api";
 import "../styles/GameBoard.css";
-import GameSetup from "./GameSetup";
 
-function GameBoard() {
-  const [numLetters, setNumLetters] = useState(4);
-  const numRows = 6;
-  const rows = Array.from({ length: numRows }, (_, i) => i);
-  const [pressedKeys, setPressedKeys] = useState(() =>
-    Array(numRows)
-      .fill()
-      .map(() => Array(numLetters).fill(null))
-  );
-  const [activeRowIndex, setActiveRowIndex] = useState(0);
-  const [gameSetupCompleted, setGameSetupCompleted] = useState(false);
+export default function GameBoard({
+    desiredWordLength,
+    allowRepeatedLetters,
+    maxGuess,
+}) {
+    // keysArray is used to store and render keys in the UI
+    const [keysArray, setKeysArray] = useState([]);
+    // currentCell is used to keep track of which cell should render output (letters, feedback)
+    const [currentCell, setCurrentCell] = useState(-1);
+    const [currentRow, setCurrentRow] = useState(1);
+    const [feedbackArray, setFeedbackArray] = useState([]);
 
-  useEffect(() => {
-    if (gameSetupCompleted) {
-      const handleKeyDown = (event) => {
-        if (event.repeat) {
-          return;
-        }
+    // guessWord is used to store the completed keysArray as a string -- when user presses enter, it is sent to the backend (where it's compared to the correct word)
+    // const guessWord;
 
-        if (event.key === "Enter") {
-          const typedWord = pressedKeys[activeRowIndex].join("");
-          if (typedWord.length === numLetters) {
-            fetch("/api/guess", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ guessWord: typedWord }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data.checkedLetters);
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+    // just use two rows instead and keep track of number of guesses
+    // by using state
+    // just use row id=1 for typing in guesses and when sent, move it to
+    // row id=0
+    // this also means: remove maxGuess from for loop and just set it to "2"...this should maybe be configurable though...but through maxRows
+
+    // if correctWord then output feedback "You found the secret word!", and prompt user to input name, and other needed data is tracked and stored either in db or in session, fetched and output in the highscore component...
+
+    // // maxGuess could also be used and gameover when guesses === maxGuess. then feed back: "You are out of guesses! Try again! And being able to push "Yeah, give it to me!", "Restart random game", add option to set min max words length for randomizer
+
+    // todo: add user registration, XP, achievements, real-time competition
+
+    // todo: set default options to only choosing word length and repeated, and every thing else to "Advanced options"
+
+    const generateGrid = () => {
+      const rows = [];
+      for (let i = 0; i < 2; i++) {
+          const cells = [];
+          for (let j = 0; j < desiredWordLength; j++) {
+              if (i === 0) {
+                  // Display feedback in row 0
+                  cells.push(
+                      <Cell key={j} id={j} className={feedbackArray[j]?.className}>
+                          {feedbackArray[j]?.key}
+                      </Cell>
+                  );
+              } else {
+                  // Allow typing in row 1
+                  cells.push(
+                      <Cell key={j} id={j}>
+                          {keysArray[j]}
+                      </Cell>
+                  );
+              }
           }
-        } else {
-          setPressedKeys((prevPressedKeys) => {
-            const currentRow = prevPressedKeys[activeRowIndex];
-            const currentCellIndex = currentRow.findIndex(
-              (key) => key === null
-            );
-            if (currentCellIndex !== -1 && !currentRow.includes(event.key)) {
-              const newPressedKeys = [...prevPressedKeys];
-              newPressedKeys[activeRowIndex][currentCellIndex] = event.key;
-              return newPressedKeys;
-            }
-            return prevPressedKeys;
-          });
-        }
-      };
-
-      document.addEventListener("keydown", handleKeyDown);
-
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [activeRowIndex, gameSetupCompleted]);
-
-  const handleNumLettersChange = (event) => {
-    setNumLetters(parseInt(event.target.value));
-    setPressedKeys(
-      Array(numRows)
-        .fill()
-        .map(() => Array(parseInt(event.target.value)).fill(null))
-    );
-  };
-
-  const handleGameSetupComplete = () => {
-    setGameSetupCompleted(true);
-  };
-
-  return (
-    <div className="game-board">
-      {!gameSetupCompleted && (
-        <GameSetup
-          numLetters={numLetters}
-          handleNumLettersChange={handleNumLettersChange}
-          handleGameSetupComplete={handleGameSetupComplete}
-        />
-      )}
-      {gameSetupCompleted &&
-        rows.map((row, rowIndex) => (
-          <div
-            key={row}
-            className={`game-board-row-${rowIndex} ${
-              rowIndex === activeRowIndex ? "active" : ""
-            }`}
-            onClick={() => setActiveRowIndex(rowIndex)}
-          >
-            {Array.from({ length: numLetters }, (_, i) => (
-              <div key={i} className="game-board-cell">
-                {pressedKeys[rowIndex][i] && (
-                  <span>{pressedKeys[rowIndex][i]}</span>
-                )}
+          rows.push(
+              <div key={i} id={i} className="row">
+                  {cells}
               </div>
-            ))}
-          </div>
-        ))}
-    </div>
-  );
-}
+          );
+      }
+      return rows;
+  };
 
-export default GameBoard;
+    // To register keyboard input, and decide what happens when we press keys, we assign this to "onKeyDown" (which is a reserved prop in React)
+    const handleKeyDown = (event) => {
+        const newKey = event.key;
+        const guessWord = keysArray.join("");
+        switch (newKey) {
+            case "Backspace":
+                setKeysArray((prevKeys) => prevKeys.slice(0, -1));
+                break;
+            case "Enter":
+                handleGuess(guessWord);
+                setKeysArray([]);
+                break;
+            default:
+                if (/^[a-zA-Z]$/.test(newKey)) {
+                    setKeysArray((prevKeys) => {
+                        if (prevKeys.length < desiredWordLength) {
+                            return [...prevKeys, newKey.toUpperCase()];
+                        } else if (prevKeys.length === desiredWordLength) {
+                            let newKeys = [...prevKeys];
+                            newKeys.splice(-1, 1, newKey.toUpperCase());
+                            return newKeys;
+                        }
+                        return prevKeys;
+                    });
+                }
+                break;
+        }
+
+        async function handleGuess(guessWord) {
+            try {
+                const responseData = await sendGuess({ guessWord: guessWord });
+                console.log("Response data:", responseData);
+
+                // Assuming responseData.checkedLetters contains the feedback for the guessed word
+                const checkedLetters = responseData.checkedLetters;
+                console.log(checkedLetters);
+
+                // Update feedbackArray with the letters and results from checkedLetters
+                const newFeedbackArray = checkedLetters.map((item) => ({
+                    key: item.letter,
+                    className: item.result,
+                }));
+
+                console.log("New feedback array:", newFeedbackArray);
+
+                setFeedbackArray(newFeedbackArray);
+            } catch (error) {
+                console.error("Error in handleGuess:", error);
+            }
+        }
+    };
+
+    // setCurrentCell((currentCell) => {
+    //     // problem might be that it always increments?
+    //     const nextCell = currentCell + 1;
+    //     // desiredWordLength does not start on 0?
+    //     if (currentCell === desiredWordLength) {
+    //         console.log("currentCell reached dWL: ", desiredWordLength);
+    //         return desiredWordLength;
+    //     } else if (currentCell < nextCell) {
+    //         console.log("currentCell in else: ", nextCell);
+    //         return nextCell;
+    //     }
+    // });
+
+    return (
+        <>
+            <div className="grid" tabIndex={-1} onKeyDown={handleKeyDown}>
+                {generateGrid()}
+            </div>
+
+            {/* FOR WHEN HANDLING GUESSES ARE DONE */}
+            {/* {isCorrect && 
+                <a href={`https://duckduckgo.com/?q=${guessWord}`} target="_blank" rel="noopener noreferrer">
+                    Learn more about {guessWord}
+                </a>
+            } */}
+        </>
+    );
+}

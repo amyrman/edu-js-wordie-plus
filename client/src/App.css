@@ -76,7 +76,7 @@ button:focus-visible {
 }
 
 .App {
-    max-width: 800px;
+    max-width: fit-content;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
@@ -119,6 +119,6 @@ nav a:hover {
 }
 
 .App-main {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
 }

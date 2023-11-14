@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { getCorrectWord } from "./utils/feedback.js";
+import getFeedback, { getCorrectWord } from "./utils/feedback.js";
 import feedback from "./utils/feedback.js";
 const port = process.env.port || 3001;
 const app = express();
@@ -22,14 +22,18 @@ app.get("/about", (req, res) => {
 let correctWord;
 
 app.post("/start", (req, res) => {
-  const { numLetters, repeatableLetters } = req.body;
-  correctWord = getCorrectWord(numLetters, repeatableLetters);
+  const { desiredWordLength, allowRepLetters } = req.body;
+  try {
+  correctWord = getCorrectWord(desiredWordLength, allowRepLetters);
   res.sendStatus(200);
+} catch (error) {
+  res.status(500).json({ error: error.message });
+}
 });
 
 app.post('/guess', (req, res) => {
   const { guessWord } = req.body;
-  const checkedLetters = feedback(guessWord, correctWord);
+  const checkedLetters = getFeedback(guessWord, correctWord);
   res.json({ checkedLetters });
 });
 
