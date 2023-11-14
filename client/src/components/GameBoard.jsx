@@ -19,27 +19,30 @@ export default function GameBoard({
         console.log("Game over, you won!");
     };
 
+    const validateResponseData = (responseData) => {
+        const checkedLetters = responseData.checkedLetters;
+
+        if (checkedLetters === null) {
+            throw new Error("checkedLetters is null");
+        }
+
+        if (!Array.isArray(checkedLetters)) {
+            throw new Error("checkedLetters is not an array");
+        }
+
+        return checkedLetters;
+    };
+
     const handleGuess = async (guessWord) => {
         try {
             const responseData = await sendGuess({ guessWord: guessWord });
             console.log("Response data:", responseData);
 
-            // Assuming responseData.checkedLetters contains the feedback for the guessed word
-            const checkedLetters = responseData.checkedLetters;
-            console.log(responseData.checkedLetters);
-
-            if (checkedLetters === null) {
-                throw new Error("checkedLetters is null");
-            }
-
-            if (!Array.isArray(checkedLetters)) {
-                throw new Error("checkedLetters is not an array");
-            }
+            const checkedLetters = validateResponseData(responseData);
+            console.log(checkedLetters);
 
             if (checkedLetters.every((item) => item.result === "correct")) {
                 gameOver();
-            } else {
-                console.log("Not all letters are correct");
             }
 
             setFeedbackArray(
@@ -56,30 +59,39 @@ export default function GameBoard({
     };
 
     const handleKeyDown = (event) => {
-        const newKey = event.key;
-        const guessWord = keysArray.join("");
-        switch (newKey) {
-            case "Backspace":
-                setKeysArray((prevKeys) => prevKeys.slice(0, -1));
-                break;
-            case "Enter":
-                handleGuess(guessWord);
-                setKeysArray([]);
-                break;
-            default:
-                if (/^[a-zA-Z]$/.test(newKey)) {
-                    setKeysArray((prevKeys) => {
-                        if (prevKeys.length < desiredWordLength) {
-                            return [...prevKeys, newKey.toUpperCase()];
-                        } else if (prevKeys.length === desiredWordLength) {
-                            let newKeys = [...prevKeys];
-                            newKeys.splice(-1, 1, newKey.toUpperCase());
-                            return newKeys;
-                        }
-                        return prevKeys;
-                    });
-                }
-                break;
+        try {
+            const newKey = event.key;
+            const guessWord = keysArray.join("");
+            switch (newKey) {
+                case "Backspace":
+                    setKeysArray((prevKeys) => prevKeys.slice(0, -1));
+                    break;
+                case "Enter":
+                    if (guessWord.length !== desiredWordLength) {
+                        return console.log(
+                            "Please make sure guessed word is long enough"
+                        );
+                    }
+                    handleGuess(guessWord);
+                    setKeysArray([]);
+                    break;
+                default:
+                    if (/^[a-zA-Z]$/.test(newKey)) {
+                        setKeysArray((prevKeys) => {
+                            if (prevKeys.length < desiredWordLength) {
+                                return [...prevKeys, newKey.toUpperCase()];
+                            } else if (prevKeys.length === desiredWordLength) {
+                                let newKeys = [...prevKeys];
+                                newKeys.splice(-1, 1, newKey.toUpperCase());
+                                return newKeys;
+                            }
+                            return prevKeys;
+                        });
+                    }
+                    break;
+            }
+        } catch (error) {
+            console.error("Error in handleKeyDown:", error);
         }
     };
 
