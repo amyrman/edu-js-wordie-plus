@@ -35,8 +35,6 @@ export default function GameBoard({
             allowRepLetters: allowRepLetters,
         };
 
-        console.log("data for highscores db: ", data);
-
         fetch("/api/highscores", {
             method: "POST",
             headers: {
@@ -73,7 +71,6 @@ export default function GameBoard({
             console.log("Response data:", responseData);
 
             const checkedLetters = validateResponseData(responseData);
-            console.log(checkedLetters);
 
             if (checkedLetters.every((item) => item.result === "correct")) {
                 gameOver();

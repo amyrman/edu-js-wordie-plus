@@ -66,8 +66,6 @@ import fs from "fs";
 // TODO: change allowRepLetters to onlyUniqueLetters
 // TODO: change from txt to GET word from dictionary API
 export function getCorrectWord(desiredWordLength, allowRepLetters) {
-    console.log("desiredWordLength:", desiredWordLength);
-    console.log("allowRepLetters:", allowRepLetters);
     const words = fs
         .readFileSync("data/words_alpha.txt", "utf8")
         // remove carriage returns
@@ -88,7 +86,6 @@ export function getCorrectWord(desiredWordLength, allowRepLetters) {
             return false;
         }
     });
-    console.log("filteredWords:", filteredWords);
     if (filteredWords.length === 0) {
         throw new Error(`No words found. Please change options.`);
     }

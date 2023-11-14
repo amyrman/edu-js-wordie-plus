@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install": "npm-run-all install:*",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "start": "npm-run-all --parallel client server",

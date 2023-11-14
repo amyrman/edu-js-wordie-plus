@@ -10,7 +10,6 @@ function getMaxWordLength() {
             maxWordLength = words[i].length;
         }
     }
-    console.log(maxWordLength);
     return maxWordLength;
 }
 
