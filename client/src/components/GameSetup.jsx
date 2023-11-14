@@ -1,9 +1,13 @@
-import { useState } from "react";
-import { useRef } from "react";
-import "../styles/GameSetup.css";
+// React hooks
+import { useState, useRef } from "react";
+
+// local modules
 import { startGame } from "../services/api.js";
 
-function GameSetup({
+// styles
+import "../styles/GameSetup.css";
+
+export default function GameSetup({
     onStart,
     onDesiredWordLengthChange,
     onAllowRepeatedLettersChange,
@@ -42,7 +46,10 @@ function GameSetup({
         const form = event.target.elements;
         const desiredWordLength = parseInt(form.desiredWordLength.value);
         const allowRepLetters = form.allowRepLetters.checked;
-        const maxGuess = form.maxGuess.value === "unlimited" ? "unlimited" : parseInt(form.maxGuess.value);
+        const maxGuess =
+            form.maxGuess.value === "unlimited"
+                ? "unlimited"
+                : parseInt(form.maxGuess.value);
 
         onDesiredWordLengthChange(desiredWordLength);
         onAllowRepeatedLettersChange(allowRepLetters);
@@ -97,7 +104,12 @@ function GameSetup({
 
                 {/* CHOOSE MAX GUESSES */}
                 <label htmlFor="maxGuess">Max no. of guesses</label>
-                <select id="maxGuess" name="maxGuess" defaultValue="unlimited" required>
+                <select
+                    id="maxGuess"
+                    name="maxGuess"
+                    defaultValue="unlimited"
+                    required
+                >
                     {formMaxGuessOptions}
                 </select>
 
@@ -111,7 +123,10 @@ function GameSetup({
                     defaultChecked={true}
                 />
 
-                <label className="dimmed" htmlFor="">Soon to come: <br />Time Trial Mode!</label>
+                <label className="dimmed" htmlFor="">
+                    Soon to come: <br />
+                    Time Trial Mode!
+                </label>
 
                 <button
                     className="shuffle-button"
@@ -128,5 +143,3 @@ function GameSetup({
         </div>
     );
 }
-
-export default GameSetup;
