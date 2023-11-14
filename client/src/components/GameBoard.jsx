@@ -1,6 +1,11 @@
-import Cell from "./Cell";
+// React hooks
 import { useState } from "react";
+
+// local modules
+import Cell from "./Cell";
 import { sendGuess } from "../services/api";
+
+// styles
 import "../styles/GameBoard.css";
 
 export default function GameBoard({
