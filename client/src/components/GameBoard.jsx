@@ -105,7 +105,7 @@ export default function GameBoard({
                     cells.push(
                         <Cell
                             key={j}
-                            id={j}
+                            id={`cell-${j}`}
                             className={feedbackArray[j]?.className}
                         >
                             {feedbackArray[j]?.key}
@@ -114,7 +114,7 @@ export default function GameBoard({
                 } else {
                     // Allow typing in row 1
                     cells.push(
-                        <Cell key={j} id={j}>
+                        <Cell key={j} id={`cell-${j}`}>
                             {keysArray[j]}
                         </Cell>
                     );
