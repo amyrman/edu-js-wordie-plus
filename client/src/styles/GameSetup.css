@@ -1,0 +1,116 @@
+.GameSetup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5em;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 80vw;
+    padding: 1.875em;
+    box-sizing: border-box;
+    border: 0.1em solid #000;
+    border-radius: 0.625em;
+    box-shadow: 0em 0em 1.25em rgba(0, 0, 0, 1);
+    background-color: #26285b;
+}
+
+/* for screens wider than 600px */
+@media screen and (min-width: 600px) {
+    .GameSetup {
+        max-width: 50vw; 
+        margin-bottom: 1.5em;
+    }
+}
+
+.GameSetup h2 {
+    margin-top: 0em;
+    margin-bottom: 0.5em;
+    font-family: "Press Start 2P", cursive;
+}
+
+.GameSetup hr {
+    width: 100%;
+    border: 0;
+    border-top: 0.2em solid #fff;
+}
+
+.GameSetup form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625em;
+}
+
+.GameSetup label {
+    font-family: "Press Start 2P", cursive;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 0.125em;
+    padding-top: 2em;
+}
+
+.GameSetup select {
+    height: fit-content;
+    width: fit-content;
+    overflow: auto;
+    font-family: "Press Start 2P", cursive;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.7em;
+}
+
+.GameSetup input[type="checkbox"] {
+    font-family: "Press Start 2P", cursive;
+    transform: scale(2);
+    margin: 0;
+    margin-top: 0.5em;
+}
+
+.GameSetup .start-button {
+    font-family: "Press Start 2P", cursive;
+    margin-top: 3em;
+    padding: 1.562em 1.875em;
+    background-color: rgba(154, 154, 70, 0.2);
+    color: rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.5s ease;
+    box-shadow: 0 0 0.625em rgba(154, 154, 70, 0.5);
+}
+
+.GameSetup .start-button:hover {
+    background-color: rgba(154, 154, 70, 1);
+    color: rgba(0, 0, 0, 1);
+    box-shadow: 0 0 1.25em rgba(154, 154, 70, 1);
+}
+
+.GameSetup .shuffle-button {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    color: initial !important;
+    box-shadow: none !important;
+    opacity: 0.5;
+    margin-top: 1em;
+}
+
+.GameSetup .shuffle-button:hover {
+    opacity: 1; /* Higher alpha channel on hover */
+}
+
+.GameSetup .shuffle-button:focus {
+    outline: none;
+}
+
+.GameSetup .shuffle-icon {
+    font-size: 2em; /* Adjust as needed */
+}
+
+.errorMessage {
+    font-size: 1em;
+    color: red;
+
+}
+
+.GameSetup .dimmed {
+  opacity: 0.1;
+}

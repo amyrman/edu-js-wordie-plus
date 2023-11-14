@@ -1,29 +1,46 @@
+import React, { useState } from "react";
+import GameSetup from "./GameSetup";
 import GameBoard from "./GameBoard";
-import Keyboard from "./Keyboard";
-import "./Game.css";
+import "../styles/Game.css";
 
-function Game() {
+const Game = () => {
+    const [setupComplete, setSetupComplete] = useState(false);
+    const [desiredWordLength, setDesiredWordLength] = useState(null);
+    const [allowRepLetters, setAllowRepLetters] = useState(false);
+    const [startTime, setStartTime] = useState(null);
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Backspace") {
-      // Handle backspace key press
-    } else if (event.key === "Enter") {
-      // Handle enter key press
-    } else {
-      // Handle letter key press
+    function handleStartGame() {
+        setSetupComplete(true);
     }
-  };
 
-  return (
-    <div>
-      <h1>Wordle</h1>
-      <p>Guess the secret word in 6 tries or less!</p>
+    function handleWordLengthChange(length) {
+        setDesiredWordLength(length);
+    }
 
-      <GameBoard numRows={6} />
+    function handleAllowRepLettersChange(allow) {
+        setAllowRepLetters(allow);
+    }
 
-      <Keyboard handleKeyPress={handleKeyPress} />
-    </div>
-  );
-}
+    return (
+        <>
+            <h1>Wordie+</h1>
+            <GameSetup
+                onStart={handleStartGame}
+                onDesiredWordLengthChange={handleWordLengthChange}
+                onAllowRepeatedLettersChange={handleAllowRepLettersChange}
+                setStartTime={setStartTime}
+            />
+
+            {setupComplete && (
+                <GameBoard
+                    desiredWordLength={desiredWordLength}
+                    allowRepLetters={allowRepLetters}
+                    startTime={startTime}
+                    setStartTime={setStartTime}
+                />
+            )}
+        </>
+    );
+};
 
 export default Game;
