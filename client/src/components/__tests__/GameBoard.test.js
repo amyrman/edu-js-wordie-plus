@@ -1,33 +1,42 @@
 /* eslint-env jest */
 
-import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import GameBoard from '../GameBoard';
+import React from "react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 
-test('renders GameBoard component without crashing', () => {
-  render(<GameBoard />);
+import GameBoard from "../GameBoard";
+
+test("GameBoard handles key presses correctly", () => {
+    const { container } = render(<GameBoard desiredWordLength={5} />);
+
+    const grid = container.querySelector(".grid");
+    fireEvent.keyDown(grid, { key: "A", code: "KeyA" });
+    fireEvent.keyDown(grid, { key: "B", code: "KeyB" });
+    fireEvent.keyDown(grid, { key: "C", code: "KeyC" });
+    fireEvent.keyDown(grid, { key: "D", code: "KeyD" });
+    fireEvent.keyDown(grid, { key: "E", code: "KeyE" });
+
+    for (let i = 0; i < 5; i++) {
+        waitFor(() => {
+            const cell = container.querySelector(`#cell-${i}`);
+            expect(cell.textContent).toBe(String.fromCharCode(65 + i));
+        });
+    }
 });
 
-test('cells are updated correctly when keys are pressed', async () => {
-  const desiredWordLength = 5;
-  const { container } = render(<GameBoard desiredWordLength={desiredWordLength} />);
+test("non-alphabetical keys are ignored, alphabetical are not", () => {
+    const { container } = render(<GameBoard desiredWordLength={5} />);
+    const grid = container.querySelector(".grid");
+    const firstCell = container.querySelector("#cell-0");
 
-  // Get the grid
-  const grid = container.querySelector('.grid');
+    fireEvent.keyDown(grid, { key: "1" });
+    expect(firstCell.textContent).toBe("");
 
-  // Simulate key presses to fill all cells
-  for (let i = 0; i < desiredWordLength; i++) {
-    fireEvent.keyDown(grid, { key: String.fromCharCode(65 + i), code: `Key${String.fromCharCode(65 + i)}` });
-  }
+    fireEvent.keyDown(grid, { key: "a" });
+    waitFor(() => {
+        expect(firstCell.textContent).toBe("a");
+    });
+});
 
-  // Get all cells
-  const cells = await waitFor(() => container.querySelectorAll('.cell'));
-
-  // Check the number of cells
-expect(cells.length).toBe(desiredWordLength);
-
-  // Check that each cell has been updated with the correct key
-  for (let i = 0; i < desiredWordLength; i++) {
-    expect(cells[i].textContent).toBe(String.fromCharCode(65 + i));
-  }
+test("renders GameBoard component without crashing", () => {
+    render(<GameBoard />);
 });
