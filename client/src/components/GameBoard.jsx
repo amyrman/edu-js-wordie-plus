@@ -121,7 +121,7 @@ export default function GameBoard({
                 }
             }
             rows.push(
-                <div key={i} id={i} className="row">
+                <div key={i} id={`row-${i}`} className="row">
                     {cells}
                 </div>
             );
