@@ -1,7 +1,7 @@
 
 ## Description
 
-Wordie+ is a web app made for a JavaScript fullstack assignment.
+Wordie+ is a word guessing web app made for a JavaScript fullstack assignment.
 
 ## Installation
 
