@@ -49,9 +49,9 @@ app.post("/highscores", (req, res) => {
 let correctWord;
 
 app.post("/start", (req, res) => {
-    const { desiredWordLength, allowRepLetters } = req.body;
+    const { lang, desiredWordLength, allowRepLetters } = req.body;
     try {
-        correctWord = getCorrectWord(desiredWordLength, allowRepLetters);
+        correctWord = getCorrectWord(lang, desiredWordLength, allowRepLetters);
         res.sendStatus(200);
         console.log(correctWord);
     } catch (error) {

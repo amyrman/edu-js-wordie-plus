@@ -31,7 +31,7 @@ const Game = () => {
                 setStartTime={setStartTime}
             />
 
-            {setupComplete && (
+            {setupComplete && startTime &&(
                 <GameBoard
                     desiredWordLength={desiredWordLength}
                     allowRepLetters={allowRepLetters}

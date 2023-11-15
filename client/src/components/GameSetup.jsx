@@ -41,7 +41,7 @@ export default function GameSetup({
             Unlimited
         </option>
     );
-    
+
     const handleStartClick = (event) => {
         event.preventDefault();
 
@@ -50,11 +50,12 @@ export default function GameSetup({
         const form = event.target.elements;
         const desiredWordLength = parseInt(form.desiredWordLength.value);
         const allowRepLetters = form.allowRepLetters.checked;
+        const lang = form.lang.value;
 
         onDesiredWordLengthChange(desiredWordLength);
         onAllowRepeatedLettersChange(allowRepLetters);
 
-        const data = { desiredWordLength, allowRepLetters };
+        const data = { lang, desiredWordLength, allowRepLetters };
 
         startGame(data)
             // catch errors in api.js instead?
@@ -87,6 +88,11 @@ export default function GameSetup({
             <h2>Game Setup</h2>
             <hr />
             <form onSubmit={handleStartClick}>
+                <label htmlFor="lang">Language</label>
+                <select id="lang" name="lang" defaultValue="en" required>
+                    <option key="1">en</option>
+                    <option key="2">sv</option>
+                </select>
                 {/* CHOOSE WORD LENGTH */}
                 <label htmlFor="desiredWordLength">Number of letters</label>
                 <select

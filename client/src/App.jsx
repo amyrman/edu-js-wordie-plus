@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Game from "./components/Game";
-import Highscores from "./components/Highscores";
 import About from "./components/About";
 import "./App.css";
 import WebFont from "webfontloader";

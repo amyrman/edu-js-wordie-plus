@@ -11,8 +11,7 @@ import "../styles/GameBoard.css";
 export default function GameBoard({
     desiredWordLength,
     allowRepLetters,
-    startTime,
-    setStartTime,
+    startTime
 }) {
     const [keysArray, setKeysArray] = useState([]);
     const [feedbackArray, setFeedbackArray] = useState([]);
@@ -20,8 +19,8 @@ export default function GameBoard({
 
     const gameOver = () => {
         let endTime = Date.now();
+        console.log("start time:", startTime)
         let timeTaken = endTime - startTime;
-        setStartTime(endTime);
         console.log("End time:", endTime);
 
         // Get the player's name
@@ -111,7 +110,7 @@ export default function GameBoard({
                     setKeysArray([]);
                     break;
                 default:
-                    if (/^[a-zA-Z]$/.test(newKey)) {
+                    if (/^[\u00C0-\u017Fa-zA-Z]$/.test(newKey)) {
                         setKeysArray((prevKeys) => {
                             if (prevKeys.length < desiredWordLength) {
                                 return [...prevKeys, newKey.toUpperCase()];

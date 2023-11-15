@@ -2,8 +2,8 @@ export default function getFeedback(guessWord, correctWord) {
     if (!correctWord) {
         throw new Error("correctWord is undefined");
     }
-    
-    if (!guessWord || typeof guessWord !== 'string') {
+
+    if (!guessWord || typeof guessWord !== "string") {
         throw new Error("guessWord is undefined or not a string");
     }
 
@@ -65,15 +65,26 @@ import fs from "fs";
 
 // TODO: change allowRepLetters to onlyUniqueLetters
 // TODO: change from txt to GET word from dictionary API
-export function getCorrectWord(desiredWordLength, allowRepLetters) {
-    const words = fs
-        .readFileSync("data/words_alpha.txt", "utf8")
-        // remove carriage returns
-        .replace(/\r/g, "")
-        // split on newlines
-        .split("\n");
+export function getCorrectWord(lang, desiredWordLength, allowRepLetters) {
+    const words = () => {
+        if (lang === "en") {
+            return fs.readFileSync("data/words-en.txt", "utf8")
+                // remove carriage returns
+                .replace(/\r/g, "")
+                // split on newlines
+                .split("\n");
+        } else if (lang === "sv") {
+            return fs.readFileSync("data/words-sv.txt", "utf8")
+                // remove carriage returns
+                .replace(/\r/g, "")
+                // split on newlines
+                .split("\n");
+        }
+    };
+    console.log(words)
     // The words array is filtered on certain criteria
-    const filteredWords = words.filter((word) => {
+    const wordsArray = words();
+    const filteredWords = wordsArray.filter((word) => {
         const isDesiredLength = word.length === desiredWordLength;
         // if allowRepLetters is true, then we don't need to check for unique letters
         // if allowRepLetters is false, then we need to check that the word has unique letters
