@@ -13,7 +13,6 @@ export default function GameSetup({
     onStart,
     onDesiredWordLengthChange,
     onAllowRepeatedLettersChange,
-    setStartTime
 }) {
     const [error, setError] = useState(null);
 
@@ -44,8 +43,6 @@ export default function GameSetup({
 
     const handleStartClick = (event) => {
         event.preventDefault();
-
-        setStartTime(Date.now());
 
         const form = event.target.elements;
         const desiredWordLength = parseInt(form.desiredWordLength.value);

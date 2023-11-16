@@ -12,7 +12,7 @@ let database = new db('./highscores.db', (err) => {
 database.run(`CREATE TABLE highscores(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    timeTaken INTEGER,
+    sessionTime REAL,
     guesses INTEGER,
     desiredWordLength INTEGER,
     allowRepLetters BOOLEAN

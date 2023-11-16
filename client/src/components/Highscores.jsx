@@ -1,9 +1,9 @@
 function HighscoreEntry(props) {
-    const { name, timeTaken, guesses, desiredWordLength, allowRepeatedLetters } = props;
+    const { name, sessionTime, guesses, desiredWordLength, allowRepeatedLetters } = props;
     return (
         <div>
             <p>Name: {name}</p>
-            <p>Time Taken: {timeTaken}</p>
+            <p>Time Taken: {sessionTime}</p>
             <p>Guesses: {guesses}</p>
             <p>Desired Word Length: {desiredWordLength}</p>
             <p>Allow Repeated Letters: {allowRepeatedLetters ? 'Yes' : 'No'}</p>

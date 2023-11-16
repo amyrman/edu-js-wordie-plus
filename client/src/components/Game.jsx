@@ -7,7 +7,6 @@ const Game = () => {
     const [setupComplete, setSetupComplete] = useState(false);
     const [desiredWordLength, setDesiredWordLength] = useState(null);
     const [allowRepLetters, setAllowRepLetters] = useState(false);
-    const [startTime, setStartTime] = useState(null);
 
     function handleStartGame() {
         setSetupComplete(true);
@@ -28,15 +27,12 @@ const Game = () => {
                 onStart={handleStartGame}
                 onDesiredWordLengthChange={handleWordLengthChange}
                 onAllowRepeatedLettersChange={handleAllowRepLettersChange}
-                setStartTime={setStartTime}
             />
 
-            {setupComplete && startTime &&(
+            {setupComplete &&(
                 <GameBoard
                     desiredWordLength={desiredWordLength}
                     allowRepLetters={allowRepLetters}
-                    startTime={startTime}
-                    setStartTime={setStartTime}
                 />
             )}
         </>

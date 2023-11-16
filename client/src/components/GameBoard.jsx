@@ -10,25 +10,19 @@ import "../styles/GameBoard.css";
 
 export default function GameBoard({
     desiredWordLength,
-    allowRepLetters,
-    startTime
+    allowRepLetters
 }) {
     const [keysArray, setKeysArray] = useState([]);
     const [feedbackArray, setFeedbackArray] = useState([]);
     const [guesses, setGuesses] = useState(1);
 
     const gameOver = () => {
-        let endTime = Date.now();
-        console.log("start time:", startTime)
-        let timeTaken = endTime - startTime;
-        console.log("End time:", endTime);
 
         // Get the player's name
         let playerName = prompt("You won!! Please enter highscore name:"); // Or get the value from an input / form field
 
         const data = {
             name: playerName,
-            timeTaken: timeTaken,
             guesses: guesses,
             desiredWordLength: desiredWordLength,
             allowRepLetters: allowRepLetters,

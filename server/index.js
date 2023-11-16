@@ -8,6 +8,10 @@ import getFeedback, { getCorrectWord } from "./utils/feedback.js";
 const port = process.env.port || 3001;
 const app = express();
 
+let correctWord;
+let startTime;
+let sessionTime;
+
 app.engine("handlebars", engine({ helpers }));
 app.set("view engine", "handlebars");
 // app.set('views', './views');
@@ -16,7 +20,7 @@ app.use(bodyParser.json());
 
 
 app.get("/highscores", (req, res) => {
-  let sql = `SELECT * FROM highscores ORDER BY timeTaken ASC, guesses ASC LIMIT 20`;
+  let sql = `SELECT * FROM highscores ORDER BY sessionTime ASC, guesses ASC LIMIT 20`;
 
     database.all(sql, [], (err, rows) => {
         if (err) {
@@ -30,12 +34,12 @@ app.get("/highscores", (req, res) => {
 });
 
 app.post("/highscores", (req, res) => {
-    const { name, timeTaken, guesses, desiredWordLength, allowRepLetters } =
+    const { name, guesses, desiredWordLength, allowRepLetters } =
         req.body;
 
     database.run(
-        `INSERT INTO highscores(name, timeTaken, guesses, desiredWordLength, allowRepLetters) VALUES(?, ?, ?, ?, ?)`,
-        [name, timeTaken, guesses, desiredWordLength, allowRepLetters],
+        `INSERT INTO highscores(name, sessionTime, guesses, desiredWordLength, allowRepLetters) VALUES(?, ?, ?, ?, ?)`,
+        [name, sessionTime, guesses, desiredWordLength, allowRepLetters],
         function (err) {
             if (err) {
                 return console.error(err.message);
@@ -46,11 +50,11 @@ app.post("/highscores", (req, res) => {
     );
 });
 
-let correctWord;
-
+// START TIMER ON THIS POST
 app.post("/start", (req, res) => {
     const { lang, desiredWordLength, allowRepLetters } = req.body;
     try {
+        startTime = (Date.now());
         correctWord = getCorrectWord(lang, desiredWordLength, allowRepLetters);
         res.sendStatus(200);
         console.log(correctWord);
@@ -59,8 +63,16 @@ app.post("/start", (req, res) => {
     }
 });
 
+// IF GUESSWORD === CORRECTWORD THEN ENDTIMER
 app.post("/guess", (req, res) => {
     const { guessWord } = req.body;
+    let stopTime;
+    console.log(guessWord, correctWord);
+    if (guessWord.toLowerCase() === correctWord.toLowerCase()) {
+        stopTime = Date.now();
+        sessionTime = (stopTime - startTime) / 1000;
+        console.log(`Session time: ${sessionTime}`);
+    }
     const checkedLetters = getFeedback(guessWord, correctWord);
     res.json({ checkedLetters });
 });
