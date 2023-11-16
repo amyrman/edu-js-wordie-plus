@@ -81,7 +81,6 @@ export function getCorrectWord(lang, desiredWordLength, allowRepLetters) {
                 .split("\n");
         }
     };
-    console.log(words)
     // The words array is filtered on certain criteria
     const wordsArray = words();
     const filteredWords = wordsArray.filter((word) => {
