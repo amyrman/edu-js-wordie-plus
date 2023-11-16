@@ -72,19 +72,24 @@
     margin: 0.5rem;
     font-size: 1.2rem;
     font-weight: bold;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
   }
   
   .cell.absent {
     background-color: red;
-    color: white;
+    color: white;    
+    transform: rotateY(360deg);
   }
   
   .cell.misplaced {
     background-color: yellow;
     color: black;
+    transform: rotateY(360deg);
   }
   
   .cell.correct {
     background-color: green;
     color: white;
+    transform: rotateY(360deg);
   }
