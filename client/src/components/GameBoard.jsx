@@ -17,9 +17,15 @@ export default function GameBoard({
     const [guesses, setGuesses] = useState(1);
 
     const gameOver = () => {
-
-        // Get the player's name
-        let playerName = prompt("You won!! Please enter highscore name:"); // Or get the value from an input / form field
+        let playerName = prompt(
+            "You won!! Please enter highscore name (max 10 characters):"
+        );
+        while (playerName.length > 10) {
+            alert("Name must be 10 characters or less.");
+            playerName = prompt(
+                "You won!! Please enter highscore name (max 10 characters):"
+            );
+        }
 
         const data = {
             name: playerName,
