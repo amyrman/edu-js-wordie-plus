@@ -35,6 +35,7 @@ export default function GameSetup({
             </option>
         );
     }
+    // TODO: Remove hard coded key
     formMaxGuessOptions.push(
         <option key={11} value="unlimited">
             Unlimited
@@ -52,7 +53,11 @@ export default function GameSetup({
         onDesiredWordLengthChange(desiredWordLength);
         onAllowRepeatedLettersChange(allowRepLetters);
 
-        const data = { lang, desiredWordLength, allowRepLetters };
+        const data = {
+            lang,
+            desiredWordLength,
+            allowRepLetters
+        };
 
         fetchPost("/api/start", data)
             .then(() => {
@@ -67,7 +72,7 @@ export default function GameSetup({
     };
 
     const handleRandomizeClick = () => {
-        // Generate random values for each form field
+        // Generate random values for each form field according to some weird common expression (max - min + 1) and + 2 to adjust the range to be between 2 - 32
         const randomWordLength = Math.floor(Math.random() * (32 - 2 + 1)) + 2;
         const randomAllowRepLetters = Math.random() < 0.5;
 
