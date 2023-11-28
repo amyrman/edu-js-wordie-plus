@@ -3,7 +3,7 @@ import { useState } from "react";
 
 // local modules
 import Cell from "./Cell";
-import { sendGuess } from "../services/api";
+import fetchPost from "../services/api";
 
 // styles
 import "../styles/GameBoard.css";
