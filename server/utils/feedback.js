@@ -1,4 +1,4 @@
-export default function getFeedback(guessWord, correctWord) {
+export function getFeedback(guessWord, correctWord) {
     if (!correctWord) {
         throw new Error("correctWord is undefined");
     }
