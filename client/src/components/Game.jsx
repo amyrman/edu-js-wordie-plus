@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GameSetup from "./GameSetup";
 import GameBoard from "./GameBoard";
+import Timer from "./Timer";
 import "../styles/Game.css";
 
 const Game = () => {
@@ -29,11 +30,14 @@ const Game = () => {
                 onAllowRepeatedLettersChange={handleAllowRepLettersChange}
             />
 
-            {setupComplete &&(
-                <GameBoard
-                    desiredWordLength={desiredWordLength}
-                    allowRepLetters={allowRepLetters}
-                />
+            {setupComplete && (
+                <>
+                    <Timer />
+                    <GameBoard
+                        desiredWordLength={desiredWordLength}
+                        allowRepLetters={allowRepLetters}
+                    />
+                </>
             )}
         </>
     );
