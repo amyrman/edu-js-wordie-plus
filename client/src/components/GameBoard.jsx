@@ -28,20 +28,7 @@ export default function GameBoard({
             allowRepLetters: allowRepLetters,
         };
 
-        fetch("/api/highscores", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Success:", data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+        fetchPost("/api/highscores", data);
     };
 
     const validateResponseData = (responseData) => {
@@ -60,9 +47,7 @@ export default function GameBoard({
 
     const handleGuess = async (guessWord) => {
         try {
-            const responseData = await sendGuess({ guessWord: guessWord });
-            console.log("Response data:", responseData);
-
+            const responseData = await fetchPost("/api/guess", { guessWord });
             const checkedLetters = validateResponseData(responseData);
 
             if (checkedLetters.every((item) => item.result === "correct")) {

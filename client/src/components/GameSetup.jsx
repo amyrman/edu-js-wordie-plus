@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 
 // local modules
-import { startGame } from "../services/api.js";
+import fetchPost from "../services/api.js";
 
 // styles
 import "../styles/GameSetup.css";
@@ -54,8 +54,7 @@ export default function GameSetup({
 
         const data = { lang, desiredWordLength, allowRepLetters };
 
-        startGame(data)
-            // catch errors in api.js instead?
+        fetchPost("/api/start", data)
             .then(() => {
                 console.log("Game started successfully");
                 setError(null);
