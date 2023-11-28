@@ -75,6 +75,21 @@ export default function GameBoard({
         }
     };
 
+    const handleDefaultKey = (newKey) => {
+        if (/^[\u00C0-\u017Fa-zA-Z]$/.test(newKey)) {
+            setKeysArray((prevKeys) => {
+                if (prevKeys.length < desiredWordLength) {
+                    return [...prevKeys, newKey.toUpperCase()];
+                } else if (prevKeys.length === desiredWordLength) {
+                    let newKeys = [...prevKeys];
+                    newKeys.splice(-1, 1, newKey.toUpperCase());
+                    return newKeys;
+                }
+                return prevKeys;
+            });
+        }
+    };
+    
     const handleKeyDown = (event) => {
         try {
             const newKey = event.key;
@@ -90,23 +105,11 @@ export default function GameBoard({
                             "Please make sure guessed word is long enough"
                         );
                     }
-                    // setGuesses((prevGuesses) => [...prevGuesses, guessWord]);
                     handleGuess(guessWord);
                     setKeysArray([]);
                     break;
                 default:
-                    if (/^[\u00C0-\u017Fa-zA-Z]$/.test(newKey)) {
-                        setKeysArray((prevKeys) => {
-                            if (prevKeys.length < desiredWordLength) {
-                                return [...prevKeys, newKey.toUpperCase()];
-                            } else if (prevKeys.length === desiredWordLength) {
-                                let newKeys = [...prevKeys];
-                                newKeys.splice(-1, 1, newKey.toUpperCase());
-                                return newKeys;
-                            }
-                            return prevKeys;
-                        });
-                    }
+                    handleDefaultKey(newKey);
                     break;
             }
         } catch (error) {
@@ -114,38 +117,47 @@ export default function GameBoard({
         }
     };
 
-    const generateGrid = () => {
-        const rows = [];
-        for (let i = 0; i < 2; i++) {
-            const cells = [];
-            for (let j = 0; j < desiredWordLength; j++) {
-                if (i === 0) {
-                    // Display feedback in row 0
-                    cells.push(
-                        <Cell
-                            key={j}
-                            id={`cell-${j}`}
-                            className={feedbackArray[j]?.className}
-                        >
-                            {feedbackArray[j]?.key}
-                        </Cell>
-                    );
-                } else {
-                    // Allow typing in row 1
-                    cells.push(
-                        <Cell key={j} id={`cell-${j}`}>
-                            {keysArray[j]}
-                        </Cell>
-                    );
-                }
+    const createCells = (i) => {
+        const cells = [];
+        for (let j = 0; j < desiredWordLength; j++) {
+            if (i === 0) {
+                // Display feedback in row 0
+                cells.push(
+                    <Cell
+                        key={j}
+                        id={`cell-${j}`}
+                        className={feedbackArray[j]?.className}
+                    >
+                        {feedbackArray[j]?.key}
+                    </Cell>
+                );
+            } else {
+                // Allow typing in row 1
+                cells.push(
+                    <Cell key={j} id={`cell-${j}`}>
+                        {keysArray[j]}
+                    </Cell>
+                );
             }
-            rows.push(
-                <div key={i} id={`row-${i}`} className="row">
-                    {cells}
-                </div>
-            );
         }
-        return rows;
+        return cells;
+    };
+
+    const generateGrid = () => {
+        try {
+            const rows = [];
+            for (let i = 0; i < 2; i++) {
+                const cells = createCells(i);
+                rows.push(
+                    <div key={i} id={`row-${i}`} className="row">
+                        {cells}
+                    </div>
+                );
+            }
+            return rows;
+        } catch (error) {
+            console.error("Error in generateGrid:", error);
+        }
     };
 
     return (
