@@ -4,11 +4,13 @@ import GameBoard from "./GameBoard";
 import Timer from "./Timer";
 import "../styles/Game.css";
 
-const Game = () => {
+const Game = ({ resetGame }) => {
     const [setupComplete, setSetupComplete] = useState(false);
     const [desiredWordLength, setDesiredWordLength] = useState(null);
     const [allowRepLetters, setAllowRepLetters] = useState(false);
     const [startTime, setStartTime] = useState(null);
+    const [gameId, setGameId] = useState(0);
+
     const ENDPOINT = "http://localhost:3001/api/events";
 
     function handleStartGame(startTime) {
@@ -61,6 +63,9 @@ const Game = () => {
                     <GameBoard
                         desiredWordLength={desiredWordLength}
                         allowRepLetters={allowRepLetters}
+                        setGameId={setGameId}
+                        gameId={gameId}
+                        resetGame={resetGame}
                     />
                 </>
             )}

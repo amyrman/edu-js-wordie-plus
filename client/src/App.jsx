@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Game from "./components/Game";
 import About from "./components/About";
@@ -12,6 +12,12 @@ WebFont.load({
 });
 
 const App = () => {
+    const [gameId, setGameId] = useState(0);
+
+    const resetGame = () => {
+        setGameId(prevGameId => prevGameId + 1);
+        
+    };
     return (
         <Router>
             <div className="App">
@@ -32,7 +38,7 @@ const App = () => {
                 </header>
                 <main className="App-main">
                     <Routes>
-                        <Route path="/" element={<Game />} />
+                        <Route path="/" element={<Game key={gameId} resetGame={resetGame}/>} />
                         <Route path="/about" element={<About />} />
                     </Routes>
                 </main>

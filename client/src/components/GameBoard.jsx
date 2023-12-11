@@ -1,3 +1,6 @@
+// Third-party libraries/modules
+import DOMPurify from "dompurify";
+
 // React hooks
 import { useState } from "react";
 
@@ -10,34 +13,47 @@ import "../styles/GameBoard.css";
 
 export default function GameBoard({
     desiredWordLength,
-    allowRepLetters
+    allowRepLetters,
+    resetGame,
 }) {
     const [keysArray, setKeysArray] = useState([]);
     const [feedbackArray, setFeedbackArray] = useState([]);
     const [guesses, setGuesses] = useState(1);
 
     const gameOver = () => {
-        let playerName = prompt(
-            "You won!! Please enter highscore name (max 10 characters):"
-        );
-        while (playerName.length > 10) {
-            alert("Name must be 10 characters or less.");
+        let playerName;
+
+        while (true) {
             playerName = prompt(
-                "You won!! Please enter highscore name (max 10 characters):"
+                "You won!! Please enter highscore name (max 10 characters) \nCancel resets game:"
             );
+
+            if (
+                playerName === null ||
+                (playerName.length >= 1 && playerName.length <= 10)
+            ) {
+                break;
+            }
+
+            alert("Name must be between 1-10 characters.");
         }
 
-        const data = {
-            name: playerName,
-            guesses: guesses,
-            desiredWordLength: desiredWordLength,
-            allowRepLetters: allowRepLetters,
-        };
+        if (playerName !== null) {
+            playerName = DOMPurify.sanitize(playerName); // Sanitize user input
+
+            const data = {
+                name: playerName,
+                guesses: guesses,
+                desiredWordLength: desiredWordLength,
+                allowRepLetters: allowRepLetters,
+            };
 
             api.insertHighscore(data);
         }
-    };
 
+        resetGame(); // Reset the game
+    };
+    // TODO: extract validation to api.js - https://kanbanflow.com/t/mVpUdK8y
     const validateResponseData = (responseData) => {
         const checkedLetters = responseData.checkedLetters;
 
