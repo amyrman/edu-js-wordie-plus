@@ -1,7 +1,7 @@
 import sqlite3 from "sqlite3";
 
 export const highscoresDb = new (sqlite3.verbose().Database)(
-    "./db/highscores.db",
+    "highscores.db",
     (err) => {
         if (err) {
             console.error(err.message);
@@ -12,7 +12,7 @@ export const highscoresDb = new (sqlite3.verbose().Database)(
 
 export function createHighscoresTable() {
     highscoresDb.run(
-        `CREATE TABLE highscores(
+        `CREATE TABLE IF NOT EXISTS highscores(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     sessionTime REAL,
