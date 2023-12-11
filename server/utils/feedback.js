@@ -63,7 +63,7 @@ export function getFeedback(guessWord, correctWord) {
 
 import fs from "fs";
 
-// TODO: change allowRepLetters to onlyUniqueLetters
+// TODO: change allowRepLetters to uniqueLetters
 // TODO: change from txt to GET word from dictionary API
 export function getCorrectWord(lang, desiredWordLength, allowRepLetters) {
     const words = () => {

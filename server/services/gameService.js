@@ -16,7 +16,11 @@ export function handleEvents(req, res) {
 
     eventSource = res;
 
+    // Send a message
+    eventSource.write('data: {"message": "Connection established"}\n\n');
+
     req.on("close", () => {
+      console.log("Connection closed by client");
         eventSource = null;
     });
 }
@@ -26,6 +30,8 @@ export function handleStartGame(req, res, next) {
     try {
         const startTime = startGame(lang, desiredWordLength, allowRepLetters);
         sendEvent("start", { startTime });
+        console.log("Start time:", startTime); // Log the start time
+
         // how is starttime then handled, when receiving res on client side?
         res.json({ startTime });
     } catch (error) {
@@ -60,6 +66,7 @@ function makeGuess(guessWord) {
         sendEvent("stop", { sessionTime });
         console.log(`Session time: ${sessionTime}`);
         if (eventSource) {
+          console.log("Connection closed by server");
             eventSource.end();
             eventSource = null;
         }
@@ -70,6 +77,8 @@ function makeGuess(guessWord) {
 function sendEvent(type, data) {
     if (eventSource) {
         eventSource.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
+        // TODO: should res be flushed?
+        // res.flush(); // Flush the response
     }
 }
 
