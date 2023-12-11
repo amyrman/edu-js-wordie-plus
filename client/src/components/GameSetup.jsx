@@ -7,7 +7,7 @@ import api from "../services/api.js";
 // styles
 import "../styles/GameSetup.css";
 
-// TODO: Add conditionally rendered "advanced" options
+// TODO: Add conditionally rendered "advanced" options and New Game+ options
 // TODO: Refactor allowRepLetters to use state instead of useRef - https://kanbanflow.com/t/zHKMeBf3
 
 export default function GameSetup({
