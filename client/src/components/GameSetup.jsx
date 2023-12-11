@@ -14,6 +14,7 @@ export default function GameSetup({
     onStart,
     onDesiredWordLengthChange,
     onAllowRepeatedLettersChange,
+    isGameRunning,
 }) {
     const [error, setError] = useState(null);
     const allowRepLettersRef = useRef();
@@ -54,10 +55,11 @@ export default function GameSetup({
         const data = {
             lang,
             desiredWordLength,
-            allowRepLetters
+            allowRepLetters,
         };
 
         //TODO: change api comm to specific operations in ../services/api.js
+        // TODO: Fix error to be understandable to user once again + add output that game has to be restarted or something
         api.performHttpOperation("POST", "/api/start", data)
             .then((response) => {
                 console.log("Game started successfully");
@@ -139,7 +141,11 @@ export default function GameSetup({
                     <span className="shuffle-icon">🔀</span>
                 </button>
                 {error && <p className="errorMessage">{error}</p>}
-                <button className="start-button" type="submit">
+                <button
+                    className="start-button"
+                    type="submit"
+                    disabled={isGameRunning}
+                >
                     Start
                 </button>
             </form>

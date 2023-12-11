@@ -10,10 +10,12 @@ const Game = ({ resetGame }) => {
     const [allowRepLetters, setAllowRepLetters] = useState(false);
     const [startTime, setStartTime] = useState(null);
     const [gameId, setGameId] = useState(0);
+    const [isGameRunning, setIsGameRunning] = useState(false);
 
     const ENDPOINT = "http://localhost:3001/api/events";
 
     function handleStartGame(startTime) {
+        setIsGameRunning(true);
         const eventSource = new EventSource(ENDPOINT);
 
         eventSource.onopen = () => {
@@ -55,6 +57,7 @@ const Game = ({ resetGame }) => {
                 onStart={handleStartGame}
                 onDesiredWordLengthChange={handleWordLengthChange}
                 onAllowRepeatedLettersChange={handleAllowRepLettersChange}
+                isGameRunning={isGameRunning}
             />
 
             {setupComplete && (
