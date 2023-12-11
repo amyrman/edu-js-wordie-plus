@@ -1,5 +1,6 @@
 import feedback from "./feedback";
 import { getCorrectWord } from "./feedback.js";
+// TODO: Fix imports etc after refactoring - https://kanbanflow.com/t/13GSyojG
 
 describe("feedback", () => {
     describe("wordle feedback function", () => {
