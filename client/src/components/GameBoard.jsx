@@ -3,7 +3,7 @@ import { useState } from "react";
 
 // local modules
 import Cell from "./Cell";
-import fetchPost from "../services/api";
+import api from "../services/api";
 
 // styles
 import "../styles/GameBoard.css";
@@ -34,7 +34,8 @@ export default function GameBoard({
             allowRepLetters: allowRepLetters,
         };
 
-        fetchPost("/api/highscores", data);
+            api.insertHighscore(data);
+        }
     };
 
     const validateResponseData = (responseData) => {
@@ -50,10 +51,14 @@ export default function GameBoard({
 
         return checkedLetters;
     };
-
+    // TODO: extract api calls to api.js - https://kanbanflow.com/t/mW6ABeBs
     const handleGuess = async (guessWord) => {
         try {
-            const responseData = await fetchPost("/api/guess", { guessWord });
+            const responseData = await api.performHttpOperation(
+                "POST",
+                "/api/guess",
+                { guessWord }
+            );
             const checkedLetters = validateResponseData(responseData);
 
             if (checkedLetters.every((item) => item.result === "correct")) {
@@ -89,7 +94,7 @@ export default function GameBoard({
             });
         }
     };
-    
+
     const handleKeyDown = (event) => {
         try {
             const newKey = event.key;

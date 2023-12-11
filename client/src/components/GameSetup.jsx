@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 
 // local modules
-import fetchPost from "../services/api.js";
+import api from "../services/api.js";
 
 // styles
 import "../styles/GameSetup.css";
@@ -59,8 +59,8 @@ export default function GameSetup({
             allowRepLetters
         };
 
-        fetchPost("/api/start", data)
-            .then(() => {
+        //TODO: change api comm to specific operations in ../services/api.js
+        api.performHttpOperation("POST", "/api/start", data)
                 console.log("Game started successfully");
                 setError(null);
                 onStart();
