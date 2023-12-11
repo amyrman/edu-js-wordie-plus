@@ -8,6 +8,7 @@ import api from "../services/api.js";
 import "../styles/GameSetup.css";
 
 // TODO: Add conditionally rendered "advanced" options
+// TODO: Refactor allowRepLetters to use state instead of useRef - https://kanbanflow.com/t/zHKMeBf3
 
 export default function GameSetup({
     onStart,
@@ -15,9 +16,7 @@ export default function GameSetup({
     onAllowRepeatedLettersChange,
 }) {
     const [error, setError] = useState(null);
-
     const allowRepLettersRef = useRef();
-
     const formWordLengthOptions = [<option key={0} value={null}></option>];
     for (let i = 2; i <= 32; i++) {
         formWordLengthOptions.push(
@@ -26,7 +25,6 @@ export default function GameSetup({
             </option>
         );
     }
-
     const formMaxGuessOptions = [<option key={0} value={null}></option>];
     for (let i = 1; i <= 10; i++) {
         formMaxGuessOptions.push(
@@ -61,9 +59,10 @@ export default function GameSetup({
 
         //TODO: change api comm to specific operations in ../services/api.js
         api.performHttpOperation("POST", "/api/start", data)
+            .then((response) => {
                 console.log("Game started successfully");
                 setError(null);
-                onStart();
+                onStart(response.startTime);
             })
             .catch((error) => {
                 console.error("Error starting game:", error);
@@ -112,6 +111,7 @@ export default function GameSetup({
                     name="maxGuess"
                     defaultValue="unlimited"
                     required
+                    disabled
                 >
                     {formMaxGuessOptions}
                 </select>

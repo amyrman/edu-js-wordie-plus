@@ -1,33 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-const ENDPOINT = "http://localhost:3001/api/events";
-
-function Timer() {
+function Timer({ startTime }) {
     const [time, setTime] = useState(0);
-    const [startTime, setStartTime] = useState(null);
-
-    useEffect(() => {
-        const eventSource = new EventSource(ENDPOINT);
-
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === "start") {
-                setStartTime(Date.now());
-            } else if (data.type === "stop") {
-                setTime(data.sessionTime);
-                setStartTime(null);
-            }
-        };
-
-        return () => {
-            eventSource.close();
-        };
-    }, []);
 
     useEffect(() => {
         if (startTime !== null) {
             const intervalId = setInterval(() => {
-                setTime(Date.now() - startTime);
+                const newTime = Date.now() - startTime;
+                setTime(newTime);
             }, 10);
 
             return () => {
