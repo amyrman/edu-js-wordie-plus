@@ -49,7 +49,7 @@ const api = {
         }
         throw error;
     },
-
+    // TODO: add guessWord to highscore data
     insertHighscore: async function (data) {
         const { POST } = this.httpMethod;
         const { highscores } = this.endpoint;

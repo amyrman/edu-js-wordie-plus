@@ -1,4 +1,4 @@
-import { getFeedback, getCorrectWord } from "../utils/feedback.js";
+import { getFeedback, getCorrectWord } from "../utils/feedback.ts";
 
 let correctWord;
 let eventSource;
@@ -30,9 +30,6 @@ export function handleStartGame(req, res, next) {
     try {
         const startTime = startGame(lang, desiredWordLength, allowRepLetters);
         sendEvent("start", { startTime });
-        console.log("Start time:", startTime); // Log the start time
-
-        // how is starttime then handled, when receiving res on client side?
         res.json({ startTime });
     } catch (error) {
         next(error);
@@ -54,7 +51,7 @@ export function handleMakeGuess(req, res, next) {
 function startGame(lang, desiredWordLength, allowRepLetters) {
     startTime = Date.now();
     correctWord = getCorrectWord(lang, desiredWordLength, allowRepLetters);
-    console.log(correctWord);
+    console.log("correct word: " + correctWord);
     return startTime;
 }
 
@@ -64,7 +61,6 @@ function makeGuess(guessWord) {
         sessionTime = (Date.now() - startTime) / 1000; // convert to seconds
         sessionTime = sessionTime.toFixed(2); // format with 2 decimals
         sendEvent("stop", { sessionTime });
-        console.log(`Session time: ${sessionTime}`);
         if (eventSource) {
           console.log("Connection closed by server");
             eventSource.end();

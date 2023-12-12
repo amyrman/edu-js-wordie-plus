@@ -1,22 +1,4 @@
-/**
- * This function takes a guessed word and the correct word, and returns feedback on the guessed word.
- *
- * @param {string} guessWord - The word guessed by the user.
- * @param {string} correctWord - The correct word.
- * @returns {Array<{ letter: string, result: 'correct' | 'absent' | 'misplaced' }>} An array of objects, where each object represents a letter in the guessed word and the result of the guess for that letter. The result can be 'correct', 'absent', or 'misplaced'.
- */
-import getFeedback from "./feedback.js";
-
-/**
- * This function is used to return a randomly chosen word based on the provided parameters (which is then used as a parameter getFeedback above).
- *
- * @param {string} lang - The language for the word.
- * @param {number} desiredWordLength - The desired length of the word.
- * @param {boolean} allowRepLetters - Whether repeated letters are allowed in the word.
- * @returns {string} The correct word.
- */
-import { getCorrectWord } from "./feedback.js";
-// TODO: Fix imports etc after refactoring - https://kanbanflow.com/t/13GSyojG
+import { getFeedback, getCorrectWord } from "./feedback.ts";
 
 describe("getFeedback", () => {
     describe("Test incorrect checks", () => {
@@ -93,7 +75,7 @@ describe("getCorrectWord", () => {
 
     describe("when allowRepLetters is true", () => {
         test("returns a string of correct length with possible repeated letters", () => {
-            const desiredWordLength = 2;
+            const desiredWordLength = 5;
             const allowRepLetters = true;
             const lang = "en";
             let correctWord;
@@ -101,8 +83,8 @@ describe("getCorrectWord", () => {
             const maxIterations = 20;
             /*
             keep calling getCorrectWord until we either:
-            a) get correctWord that has repeatable letters, or
-            b) reach 20 iterations
+            a) get a correctWord that has repeatable letters, or
+            b) reach 20 iterations (which will output a console.warn before any test output)
             */ 
             do {
                 correctWord = getCorrectWord(
@@ -115,6 +97,10 @@ describe("getCorrectWord", () => {
                 new Set(correctWord).size === desiredWordLength &&
                 iterations < maxIterations
             );
+
+            if (iterations === maxIterations) {
+                console.warn('Test reached maxIterations without finding a word with repeated letters');
+            }
 
             expect(typeof correctWord).toBe("string");
             expect(correctWord.length).toBe(desiredWordLength);

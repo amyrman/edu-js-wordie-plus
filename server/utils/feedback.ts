@@ -1,4 +1,20 @@
-export default function getFeedback(guessWord, correctWord) {
+/**
+ * This function takes a guessed word and the correct word, and returns feedback on the guessed word.
+ *
+ * @param {string} guessWord - The word guessed by the user.
+ * @param {string} correctWord - The correct word.
+ * @returns {Array<{ letter: string, result: 'correct' | 'absent' | 'misplaced' }>} An array of objects, where each object represents a letter in the guessed word and the result of the guess for that letter. The result can be 'correct', 'absent', or 'misplaced'.
+ */
+
+type FeedbackResult = {
+    letter: string;
+    result: "correct" | "misplaced" | "absent";
+};
+
+export const getFeedback = (
+    guessWord: string,
+    correctWord: string
+): FeedbackResult[] => {
     if (!correctWord) {
         throw new Error("correctWord is undefined");
     }
@@ -59,30 +75,48 @@ export default function getFeedback(guessWord, correctWord) {
         }
     }
     return checkedLetters;
-}
+};
 
 import fs from "fs";
 
 // TODO: change allowRepLetters to uniqueLetters
 // TODO: change from txt to GET word from dictionary API
-export function getCorrectWord(lang, desiredWordLength, allowRepLetters) {
+// TODO: extract getCorrectWord into its own file
+/**
+ * This function is used to return a randomly chosen word based on the provided parameters (which is then used as a parameter getFeedback above).
+ *
+ * @param {string} lang - The language for the word.
+ * @param {number} desiredWordLength - The desired length of the word.
+ * @param {boolean} allowRepLetters - Whether repeated letters are allowed in the word.
+ * @returns {string} The correct word.
+ */
+export const getCorrectWord = (lang, desiredWordLength, allowRepLetters) => {
     const words = () => {
         if (lang === "en") {
-            return fs.readFileSync("data/words-en.txt", "utf8")
-                // remove carriage returns
-                .replace(/\r/g, "")
-                // split on newlines
-                .split("\n");
+            return (
+                fs
+                    .readFileSync("data/words-en.txt", "utf8")
+                    // remove carriage returns
+                    .replace(/\r/g, "")
+                    // split on newlines
+                    .split("\n")
+            );
         } else if (lang === "sv") {
-            return fs.readFileSync("data/words-sv.txt", "utf8")
-                // remove carriage returns
-                .replace(/\r/g, "")
-                // split on newlines
-                .split("\n");
+            return (
+                fs
+                    .readFileSync("data/words-sv.txt", "utf8")
+                    // remove carriage returns
+                    .replace(/\r/g, "")
+                    // split on newlines
+                    .split("\n")
+            );
         }
     };
     // The words array is filtered on certain criteria
     const wordsArray = words();
+    if (!wordsArray) {
+        throw new Error("wordsArray is undefined");
+    }
     const filteredWords = wordsArray.filter((word) => {
         const isDesiredLength = word.length === desiredWordLength;
         // if allowRepLetters is true, then we don't need to check for unique letters
@@ -100,4 +134,4 @@ export function getCorrectWord(lang, desiredWordLength, allowRepLetters) {
         throw new Error(`No words found. Please change options.`);
     }
     return filteredWords[Math.floor(Math.random() * filteredWords.length)];
-}
+};

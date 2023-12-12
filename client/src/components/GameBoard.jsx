@@ -23,6 +23,7 @@ export default function GameBoard({
     const gameOver = () => {
         let playerName;
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             playerName = prompt(
                 "You won!! Please enter highscore name (max 10 characters) \nCancel resets game:"

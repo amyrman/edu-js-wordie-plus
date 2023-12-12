@@ -12,9 +12,7 @@ export function getHighscoresHandler(req, res, next) {
 }
 
 export function insertHighscoreHandler(req, res, next) {
-  console.log("insertHighscoreHandler called");
   const { name, guesses, desiredWordLength, allowRepLetters } = req.body;
-  console.log(`insertHighscoreHandler received sessionTime: ${sessionTime}`);
   insertHighscore(
     name,
     sessionTime,

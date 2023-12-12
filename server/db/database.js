@@ -1,7 +1,12 @@
 import sqlite3 from "sqlite3";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __fileName = fileURLToPath(import.meta.url);
+const __dirName = path.dirname(__fileName);
+// TODO: check why highscores.db gets created in root
 export const highscoresDb = new (sqlite3.verbose().Database)(
-    "highscores.db",
+    `${__dirName}/highscores.db`,
     (err) => {
         if (err) {
             console.error(err.message);
@@ -30,7 +35,6 @@ export function createHighscoresTable() {
 }
 
 export function insertHighscore(name, sessionTime, guesses, desiredWordLength, allowRepLetters, callback) {
-    console.log(`insertHighscore called with sessionTime: ${sessionTime}`);
   highscoresDb.run(
       `INSERT INTO highscores(name, sessionTime, guesses, desiredWordLength, allowRepLetters) VALUES(?, ?, ?, ?, ?)`,
       [name, sessionTime, guesses, desiredWordLength, allowRepLetters],

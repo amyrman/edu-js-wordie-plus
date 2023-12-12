@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { engine } from "express-handlebars";
-import helpers from "./helpers.js";
-import { createHighscoresTable } from "./db/database.js";
+import helpers from "../utils/helpers.js";
+import { createHighscoresTable } from "../db/database.js";
 
 const app = express();
 const port = process.env.port || 3001;
