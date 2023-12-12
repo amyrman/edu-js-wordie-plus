@@ -18,4 +18,7 @@ Wordie+ is a word guessing web app made for a JavaScript fullstack assignment.
     ```bash
     npm start
     ```
-4. Open `localhost:5080` in browser.
+4. Open in browser:
+    ```bash
+    localhost:5080
+    ```
